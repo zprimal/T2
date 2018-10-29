@@ -106,7 +106,7 @@ int main (int argc, char* argv[]) {
 
 			//Send to replicant server if primary has missed it
 			if (!flag) {
-				cout << "Resending to replicant..." << endl;
+				cout << "\033[31m" << "Resending to replicant..." << endl;
 				MPI_Send (&destNode, strlen(destNode)+1, MPI_CHAR, replicateServer, TAG_NAME_RESOLUTION, MPI_COMM_WORLD);
 				MPI_Recv (&netAddress, 1, MPI_INT, replicateServer, TAG_NAME_RESOLUTION, MPI_COMM_WORLD, &stat);
 			} else {
@@ -120,9 +120,9 @@ int main (int argc, char* argv[]) {
 				cout << "\033[33m" << "[P0] Sending data to process \"" << destNode << "\" at address " << netAddress << endl;
 				MPI_Send (&data, 1, MPI_INT, router(netAddress), TAG_NORMAL_MESSAGE, MPI_COMM_WORLD);
 				MPI_Recv (&reply, 1, MPI_INT, router(netAddress), TAG_NORMAL_MESSAGE, MPI_COMM_WORLD, &stat);
-				cout << "\033[33m" << "[P0] Receiving reply from \"" << destNode << "\"" << endl;
+				cout << "\033[32m" << "[P0] Receiving reply from \"" << destNode << "\"" << endl;
 			} else {
-				cout << "\033[33m" << "[P0] Invalid process name" << endl;
+				cout << "\033[31m" << "[P0] Invalid process name" << endl;
 			}
 
 		}
@@ -229,14 +229,12 @@ int main (int argc, char* argv[]) {
 		while (1) {
 			//receive request from peer 0
 			MPI_Recv (&data, 1, MPI_INT, 0, TAG_NORMAL_MESSAGE, MPI_COMM_WORLD, &stat);
-			cout << "\033[34m" << "[" << nodeName << "] receive request from P0" << endl;
+			cout << "\033[34m" << "[" << nodeName << "] received request from P0" << endl;
 			reply = 456;
 			//send back the reply
 			MPI_Send (&reply, 1, MPI_INT, 0, TAG_NORMAL_MESSAGE, MPI_COMM_WORLD);
 		}
 	}
-
-    cout << "\033[0m";
     // Finalize the MPI environment.
     MPI_Finalize();
 }
